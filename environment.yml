@@ -1,0 +1,12 @@
+name: snakemake
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - snakemake=8.4
+  - python=3.11
+  - snakemake-executor-plugin-slurm
+  - snakemake-storage-plugin-s3
+  - mamba
+  - pip

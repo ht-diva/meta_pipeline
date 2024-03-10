@@ -1,0 +1,7 @@
+name: snakemake
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - snakefmt=0.10
+  - conda-forge::pre-commit

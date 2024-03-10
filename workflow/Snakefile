@@ -1,0 +1,85 @@
+from snakemake.utils import min_version
+from pathlib import Path
+import pandas as pd
+
+##### set minimum snakemake version #####
+min_version("8.4.1")
+
+
+configfile: "config/config.yaml"
+
+
+def overlap_map():
+    path_list_study_one = config.get("path_list_study_one")
+    path_list_study_two = config.get("path_list_study_two")
+    temp_dict = {}
+
+    with open(path_list_study_one, "r") as fp1, open(path_list_study_two, "r") as fp2:
+        lines1 = [line.strip() for line in fp1.readlines()]
+        lines2 = [line.strip() for line in fp2.readlines()]
+
+    for line in lines1:
+        path = Path(line)
+        sequence_id = ".".join(path.stem.split(".")[:3])
+        temp_dict[sequence_id] = {"file_path_study_one": str(path)}
+
+    for line in lines2:
+        path = Path(line)
+        sequence_id = ".".join(path.stem.split(".")[:3])
+        temp_dict[sequence_id] = temp_dict.get(sequence_id, {})
+        temp_dict[sequence_id]["file_path_study_two"] = str(path)
+
+    temp_dict = {key: temp_dict[key] for key in temp_dict if len(temp_dict[key]) > 1}
+
+    data = [
+        (key, value["file_path_study_one"], value["file_path_study_two"])
+        for key, value in temp_dict.items()
+    ]
+
+    _overlap_table = (
+        pd.DataFrame.from_records(
+            data, columns=["seqid", "file_path_study_one", "file_path_study_two"]
+        )
+        .set_index("seqid", drop=False)
+        .sort_index()
+    )
+
+    return _overlap_table
+
+
+def ws_path(file_path):
+    return str(Path(config.get("workspace_path"), file_path))
+
+
+rule all:
+    input:
+        expand(ws_path("{seqid}/METAL_output_{seqid}_1.TBL"), seqid=overlap_map().seqid),
+
+
+rule create_profiles:
+    input:
+        template=config.get("template_profile"),
+    params:
+        outdir=ws_path("{seqid}"),
+        overlap_map=overlap_map(),
+    output:
+        ws_path("{seqid}/profile_{seqid}.txt"),
+    conda:
+        "envs/python.yml"
+    resources:
+        runtime=lambda wc, attempt: attempt * 5,
+    script:
+        "scripts/create_profiles.py"
+
+
+rule execute_metal:
+    input:
+        ws_path("{seqid}/profile_{seqid}.txt"),
+    output:
+        ws_path("{seqid}/METAL_output_{seqid}_1.TBL"),
+    container:
+        "docker://gitlab.fht.org:5050/hds-center/containers/metal:c9558b23"
+    resources:
+        runtime=lambda wc, attempt: attempt * 60,
+    shell:
+        "metal {input}"

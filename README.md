@@ -14,5 +14,7 @@ see also [environment.yml](environment.yml) and [Makefile](Makefile)
 
 The output is written to the path defined by the **workspace_path** variable in the config.yaml file. By default, this path is `./results`.
 
+The pipeline uses 2 path_list files to get the path to the study summary stats (you can find them in the [data](data) dir).
+
 At the very beginning, the pipeline tries to match each protein label from the first study with the corresponding one from the second study and writes a mismatch_table.csv file to the workspace.
 Only matching datasets are processed with METAL

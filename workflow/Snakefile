@@ -80,6 +80,6 @@ rule execute_metal:
     container:
         "docker://gitlab.fht.org:5050/hds-center/containers/metal:c9558b23"
     resources:
-        runtime=lambda wc, attempt: attempt * 60,
+        runtime=lambda wc, attempt: attempt * 10,
     shell:
         "metal {input}"

@@ -11,8 +11,9 @@ def main(overlap_map, template_file, outdir):
         for line in lines:
             line = line.replace("input_study_one", overlap_map.loc[seqid, 'file_path_study_one'], 1)
             line = line.replace("input_study_two", overlap_map.loc[seqid, 'file_path_study_two'], 1)
-            line = line.replace("output_path", outdir, 1)
+            line = line.replace("output_path", f"{outdir}/METAL_output_{seqid}_", 1)
             fp.write(line)
+
 
 
 main(overlap_map=snakemake.params.overlap_map,

@@ -35,7 +35,7 @@ LABEL TotalSampleSize as N
 PROCESS input_study_two
 
 # -----------------------------------------------------------------------------------------'
-OUTFILE output_path/METAL_output .TBL #you need the space before '.TBL' for some reason, and it will output a '1.TBL', again for whatever reason
+OUTFILE output_path .TBL #you need the space before '.TBL' for some reason, and it will output a '1.TBL', again for whatever reason
 LOGPVALUE ON
 ANALYZE HETEROGENEITY
 CLEAR

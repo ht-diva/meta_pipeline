@@ -9,7 +9,7 @@ min_version("8.4.1")
 configfile: "config/config.yaml"
 
 
-def overlap_map():
+def matching_map():
     path_list_study_one = config.get("path_list_study_one")
     path_list_study_two = config.get("path_list_study_two")
     temp_dict = {}
@@ -29,14 +29,43 @@ def overlap_map():
         temp_dict[sequence_id] = temp_dict.get(sequence_id, {})
         temp_dict[sequence_id]["file_path_study_two"] = str(path)
 
-    temp_dict = {key: temp_dict[key] for key in temp_dict if len(temp_dict[key]) > 1}
+    # Save data with mismatching values
+    mismatching_dict = {
+        key: temp_dict[key] for key in temp_dict if len(temp_dict[key]) <= 1
+    }
+
+    mismatching_data = [
+        (
+            key,
+            value.get("file_path_study_one", ""),
+            value.get("file_path_study_two", ""),
+        )
+        for key, value in mismatching_dict.items()
+    ]
+
+    mismatching_table = (
+        pd.DataFrame.from_records(
+            mismatching_data,
+            columns=["seqid", "file_path_study_one", "file_path_study_two"],
+        )
+        .set_index("seqid", drop=True)
+        .sort_index()
+    )
+
+    Path(config.get("workspace_path")).mkdir(parents=True, exist_ok=True)
+    mismatching_table.to_csv(ws_path("mismatch_table.csv"), sep="\t")
+
+    # return data with matching values
+    matching_dict = {
+        key: temp_dict[key] for key in temp_dict if len(temp_dict[key]) > 1
+    }
 
     data = [
         (key, value["file_path_study_one"], value["file_path_study_two"])
-        for key, value in temp_dict.items()
+        for key, value in matching_dict.items()
     ]
 
-    _overlap_table = (
+    matching_table = (
         pd.DataFrame.from_records(
             data, columns=["seqid", "file_path_study_one", "file_path_study_two"]
         )
@@ -44,7 +73,7 @@ def overlap_map():
         .sort_index()
     )
 
-    return _overlap_table
+    return matching_table
 
 
 def ws_path(file_path):
@@ -53,7 +82,9 @@ def ws_path(file_path):
 
 rule all:
     input:
-        expand(ws_path("{seqid}/METAL_output_{seqid}_1.TBL"), seqid=overlap_map().seqid),
+        expand(
+            ws_path("{seqid}/METAL_output_{seqid}_1.TBL"), seqid=matching_map().seqid
+        ),
 
 
 rule create_profiles:
@@ -61,7 +92,7 @@ rule create_profiles:
         template=config.get("template_profile"),
     params:
         outdir=ws_path("{seqid}"),
-        overlap_map=overlap_map(),
+        overlap_map=matching_map(),
     output:
         ws_path("{seqid}/profile_{seqid}.txt"),
     conda:

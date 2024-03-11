@@ -15,7 +15,6 @@ def main(overlap_map, template_file, outdir):
             fp.write(line)
 
 
-
-main(overlap_map=snakemake.params.overlap_map,
+main(overlap_map=snakemake.params.matching_map,
      template_file=snakemake.input.template,
      outdir=snakemake.params.outdir)

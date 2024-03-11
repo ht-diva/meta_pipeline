@@ -1,0 +1,41 @@
+
+#METAL expects that each set of results will be summarized in a table. This table must be stored in a text file but otherwise METAL is quite flexible about details such as column separators, column headers and the like.
+
+SCHEME STDERR
+GENOMICCONTROL OFF
+TRACKPOSITIONS ON
+AVERAGEFREQ ON
+MINMAXFREQ ON
+CUSTOMVARIABLE TotalSampleSize
+
+# -----------------------------------------------------------------------------------------'
+# Describe and process the GWAS input files of cohort INTERVAL WHI_EA
+SEPARATOR  TAB
+MARKER   ID
+ALLELE   ALLELE1 ALLELE0
+FREQLABEL   A1FREQ
+EFFECT   BETA
+STDERR   SE
+CHROMOSOME   CHROM
+POSITION   GENPOS
+LABEL TotalSampleSize as N
+PROCESS input_study_one
+
+# -----------------------------------------------------------------------------------------'
+# Describe and process the GWAS input files of cohort CHRIS
+SEPARATOR  TAB
+MARKER   ID
+ALLELE   ALLELE1 ALLELE0
+FREQLABEL   A1FREQ
+EFFECT   BETA
+STDERR   SE
+CHROMOSOME   CHROM
+POSITION   GENPOS
+LABEL TotalSampleSize as N
+PROCESS input_study_two
+
+# -----------------------------------------------------------------------------------------'
+OUTFILE output_path/METAL_output .TBL #you need the space before '.TBL' for some reason, and it will output a '1.TBL', again for whatever reason
+LOGPVALUE ON
+ANALYZE HETEROGENEITY
+CLEAR

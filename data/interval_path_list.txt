@@ -1,0 +1,10 @@
+/scratch/gianmauro.cuccuru/pqtl_pipeline/interval/results/outputs/seq.10001.7/seq.10001.7.regenie.tsv.gz
+/scratch/gianmauro.cuccuru/pqtl_pipeline/interval/results/outputs/seq.10006.25/seq.10006.25.regenie.tsv.gz
+/scratch/gianmauro.cuccuru/pqtl_pipeline/interval/results/outputs/seq.10008.43/seq.10008.43.regenie.tsv.gz
+/scratch/gianmauro.cuccuru/pqtl_pipeline/interval/results/outputs/seq.10010.10/seq.10010.10.regenie.tsv.gz
+/scratch/gianmauro.cuccuru/pqtl_pipeline/interval/results/outputs/seq.10011.65/seq.10011.65.regenie.tsv.gz
+/scratch/gianmauro.cuccuru/pqtl_pipeline/interval/results/outputs/seq.10012.5/seq.10012.5.regenie.tsv.gz
+/scratch/gianmauro.cuccuru/pqtl_pipeline/interval/results/outputs/seq.10014.31/seq.10014.31.regenie.tsv.gz
+/scratch/gianmauro.cuccuru/pqtl_pipeline/interval/results/outputs/seq.10015.119/seq.10015.119.regenie.tsv.gz
+/scratch/gianmauro.cuccuru/pqtl_pipeline/interval/results/outputs/seq.10022.207/seq.10022.207.regenie.tsv.gz
+/scratch/gianmauro.cuccuru/pqtl_pipeline/interval/results/outputs/seq.10023.32/seq.10023.32.regenie.tsv.gz

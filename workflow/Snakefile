@@ -92,7 +92,7 @@ rule create_profiles:
         template=config.get("template_profile"),
     params:
         outdir=ws_path("{seqid}"),
-        overlap_map=matching_map(),
+        matching_map=matching_map(),
     output:
         ws_path("{seqid}/profile_{seqid}.txt"),
     conda:

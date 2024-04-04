@@ -63,8 +63,6 @@ def matching_map():
         .set_index("seqid", drop=True)
         .sort_index()
     )
-
-    Path(config.get("workspace_path")).mkdir(parents=True, exist_ok=True)
     mismatching_table.to_csv(ws_path("mismatch_table.csv"), sep="\t")
 
     # return data with matching values
@@ -90,6 +88,7 @@ def matching_map():
 
 
 def ws_path(file_path):
+    Path(config.get("workspace_path")).mkdir(parents=True, exist_ok=True)
     return str(Path(config.get("workspace_path"), file_path))
 
 

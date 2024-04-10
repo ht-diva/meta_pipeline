@@ -7,7 +7,7 @@ retries: 3
 max-jobs-per-second: 10
 max-status-checks-per-second: 1
 local-cores: 1
-cores: &cores 8
+cores: &cores 4
 latency-wait: 60
 keep-going: True
 rerun-incomplete: False
@@ -23,3 +23,5 @@ default-resources:
 set-resources:
     execute_metal:
         mem_mb: 8192 + attempt * 2048
+    sort:
+        threads: *cores

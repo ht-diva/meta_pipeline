@@ -1,5 +1,7 @@
 # paths
 workspace_path: "results"
+dest_path: "destination"
 path_list_study_one: "data/interval_path_list.txt"
 path_list_study_two: "data/chris_path_list.txt"
 template_profile: "data/template_profile.txt"
+exclude_file: "data/exclude.txt"

@@ -92,12 +92,13 @@ def ws_path(file_path):
     return str(Path(config.get("workspace_path"), file_path))
 
 
+def dst_path(file_path):
+    return str(Path(config.get("dest_path"), file_path))
+
+
 rule all:
     input:
-        expand(
-            ws_path("{seqid}/METAL_output_{seqid}_1.sorted.TBL"),
-            seqid=matching_map().seqid,
-        ),
+        expand(dst_path("{seqid}/.delivery.done"), seqid=matching_map().seqid),
 
 
 rule create_profiles:
@@ -138,3 +139,19 @@ rule sort:
         runtime=lambda wc, attempt: attempt * 5,
     shell:
         "sort --parallel={threads} -k 1n -k 2n {input} > {output}"
+
+
+rule delivery:
+    input:
+        ws_path("{seqid}/METAL_output_{seqid}_1.sorted.TBL"),
+    output:
+        touch(dst_path("{seqid}/.delivery.done")),
+    params:
+        folder=ws_path("{seqid}/"),
+        output_folders=dst_path(""),
+        exclude=config.get("exclude_file"),
+    resources:
+        runtime=lambda wc, attempt: attempt * 60,
+    shell:
+        """
+        rsync -rlptoDvz --exclude-from {params.exclude} {params.folder} {params.output_folders}"""

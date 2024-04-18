@@ -141,9 +141,24 @@ rule sort:
         "sort --parallel={threads} -k 1n -k 2n {input} > {output}"
 
 
-rule delivery:
+rule filter:
     input:
         ws_path("{seqid}/METAL_output_{seqid}_1.sorted.TBL"),
+    output:
+        ws_path("{seqid}/METAL_output_{seqid}_1.sorted.filtered.TBL"),
+    resources:
+        runtime=lambda wc, attempt: attempt * 60,
+    params:
+        char="?",
+    shell:
+        """
+        grep {params.char} {input} > {output}
+        """
+
+
+rule delivery:
+    input:
+        ws_path("{seqid}/METAL_output_{seqid}_1.sorted.filtered.TBL"),
     output:
         touch(dst_path("{seqid}/.delivery.done")),
     params:

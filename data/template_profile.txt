@@ -11,26 +11,26 @@ CUSTOMVARIABLE TotalSampleSize
 # -----------------------------------------------------------------------------------------'
 # Describe and process the GWAS input files of cohort INTERVAL WHI_EA
 SEPARATOR  TAB
-MARKER   ID
-ALLELE   ALLELE1 ALLELE0
-FREQLABEL   A1FREQ
+MARKER   SNPID
+ALLELE   NEA EA
+FREQLABEL   EAF
 EFFECT   BETA
 STDERR   SE
-CHROMOSOME   CHROM
-POSITION   GENPOS
+CHROMOSOME   CHR
+POSITION   POS
 LABEL TotalSampleSize as N
 PROCESS input_study_one
 
 # -----------------------------------------------------------------------------------------'
 # Describe and process the GWAS input files of cohort CHRIS
 SEPARATOR  TAB
-MARKER   ID
-ALLELE   ALLELE1 ALLELE0
-FREQLABEL   A1FREQ
+MARKER   SNPID
+ALLELE   NEA EA
+FREQLABEL   EAF
 EFFECT   BETA
 STDERR   SE
-CHROMOSOME   CHROM
-POSITION   GENPOS
+CHROMOSOME   CHR
+POSITION   POS
 LABEL TotalSampleSize as N
 PROCESS input_study_two
 

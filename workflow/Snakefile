@@ -169,4 +169,4 @@ rule delivery:
         runtime=lambda wc, attempt: attempt * 60,
     shell:
         """
-        rsync -rlptoDvz --exclude-from {params.exclude} {params.folder} {params.output_folders}"""
+        rsync -rlptoDvz --chmod "D755,F644" --exclude-from {params.exclude} {params.folder} {params.output_folders}"""

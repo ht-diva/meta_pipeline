@@ -19,11 +19,14 @@ pre-commit:
 	if [ ! -f .git/hooks/pre-commit ]; then pre-commit install; fi
 	pre-commit run --all-files
 
+local-run:
+	snakemake --printshellcmds --sdm conda --sdm apptainer --cores 4 --snakefile workflow/Snakefile
+
 run:
 	snakemake --profile slurm --snakefile workflow/Snakefile
 
 rerun:
-	snakemake --profile slurm --snakefile workflow/Snakefile --rerun-incomplete
+	snakemake --profile slurm --snakefile workflow/Snakefile --rerun-incomplete --rerun-trigger mtime
 
 unlock:
 	snakemake --unlock

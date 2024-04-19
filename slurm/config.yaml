@@ -25,3 +25,4 @@ set-resources:
         mem_mb: 8192 + attempt * 2048
     sort:
         threads: *cores
+        mem_mb: 2048 + attempt * 2048

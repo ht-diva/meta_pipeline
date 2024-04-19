@@ -136,7 +136,7 @@ rule sort:
     output:
         ws_path("{seqid}/METAL_output_{seqid}_1.sorted.TBL"),
     resources:
-        runtime=lambda wc, attempt: attempt * 15,
+        runtime=lambda wc, attempt: attempt * 60,
     shell:
         "sort --parallel={threads} -k 1n -k 2n {input} > {output}"
 

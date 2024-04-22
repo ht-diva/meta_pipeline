@@ -71,7 +71,7 @@ rule filter:
         char="?",
     shell:
         """
-        grep {params.char} {input} > {output}
+        grep -v {params.char} {input} > {output}
         """
 
 

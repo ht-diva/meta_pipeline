@@ -15,7 +15,7 @@ include: "rules/delivery.smk"
 
 rule all:
     input:
-        expand(dst_path("{seqid}/.delivery.done"), seqid=matching_map().seqid),
+        expand(dst_path("metal/{seqid}/.delivery.done"), seqid=matching_map().seqid),
         dst_path("tables_delivery.done"),
         expand(dst_path("plots/{seqid}.png"), seqid=matching_map().seqid),
 

@@ -28,3 +28,6 @@ set-resources:
         mem_mb: 2048 + attempt * 2048
     filter:
         mem_mb: 2048 + attempt * 2048
+    standardize:
+        mem_mb: 22528 + attempt * 2048
+        threads: *cores

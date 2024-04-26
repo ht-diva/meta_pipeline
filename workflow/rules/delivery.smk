@@ -2,9 +2,9 @@ rule sync_outputs_folder:
     input:
         ws_path("metal/{seqid}/{seqid}.metal_het.tsv.gz"),
     output:
-        touch(dst_path("{seqid}/.delivery.done")),
+        touch(dst_path("metal/{seqid}/.delivery.done")),
     params:
-        folder=ws_path("{seqid}/"),
+        folder=ws_path("metal/{seqid}/"),
         output_folders=dst_path(""),
         exclude=config.get("exclude_file"),
     resources:

@@ -53,7 +53,7 @@ rule sort:
     input:
         ws_path("metal/{seqid}/METAL_output_{seqid}_1.TBL"),
     output:
-        ws_path("metal/{seqid}/METAL_output_{seqid}_1.sorted.TBL"),
+        ws_path("metal/{seqid}/{seqid}_1.sorted.TBL"),
     resources:
         runtime=lambda wc, attempt: attempt * 60,
     shell:
@@ -62,9 +62,9 @@ rule sort:
 
 rule filter:
     input:
-        ws_path("metal/{seqid}/METAL_output_{seqid}_1.sorted.TBL"),
+        ws_path("metal/{seqid}/{seqid}_1.sorted.TBL"),
     output:
-        ws_path("metal/{seqid}/METAL_output_{seqid}_1.sorted.filtered.TBL"),
+        ws_path("metal/{seqid}/{seqid}_1.sorted.filtered.TBL"),
     resources:
         runtime=lambda wc, attempt: attempt * 60,
     params:
@@ -77,7 +77,7 @@ rule filter:
 
 rule standardize:
     input:
-        ws_path("metal/{seqid}/METAL_output_{seqid}_1.sorted.filtered.TBL"),
+        ws_path("metal/{seqid}/{seqid}_1.sorted.filtered.TBL"),
     output:
         ws_path("metal/{seqid}/{seqid}.metal_het.tsv.gz"),
         temp(ws_path("min_P/{seqid}.nlargest.txt")),

@@ -32,7 +32,7 @@ steps:
     gl_params:
       to_fill: ['MLOG10P', 'Z']
       overwrite: False
-      extreme: False
+      extreme: True
   harmonize: # see https://cloufield.github.io/gwaslab/Harmonization/
     params:
       run: True

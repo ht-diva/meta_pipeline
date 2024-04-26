@@ -5,7 +5,7 @@ rule sync_outputs_folder:
         touch(dst_path("metal/{seqid}/.delivery.done")),
     params:
         folder=ws_path("metal/{seqid}/"),
-        output_folders=dst_path(""),
+        output_folders=dst_path("metal"),
         exclude=config.get("exclude_file"),
     resources:
         runtime=lambda wc, attempt: attempt * 60,

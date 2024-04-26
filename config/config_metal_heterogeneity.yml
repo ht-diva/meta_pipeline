@@ -1,0 +1,97 @@
+---
+# common parameters
+n_cores: &cores 4
+
+# This is an ordered dict that contains the order in which the steps are run.
+run_sequence: !!omap
+  - 1: 'basic_check'
+  - 2: 'infer_build'
+  - 3: 'fill_data'
+  - 4: 'harmonize'
+  - 5: 'sort_alphabetically'
+  - 6: 'write_metal'
+  - 7: 'report_min_pvalue'
+  - 8: 'report_harmonization_summary'
+  - 9: 'report_inflation_factors'
+  - 10: 'qq_manhattan_plots'
+
+
+steps:
+  basic_check: # see https://cloufield.github.io/gwaslab/Standardization/
+    params:
+      run: True
+    gl_params:
+      n_cores: *cores
+      normalize: True
+  infer_build: # see https://cloufield.github.io/gwaslab/InferBuild/
+    params:
+      run: True
+  fill_data: # see https://cloufield.github.io/gwaslab/Conversion/#fill_data
+    params:
+      run: True
+    gl_params:
+      to_fill: ['MLOG10P', 'Z']
+      overwrite: False
+      extreme: False
+  harmonize: # see https://cloufield.github.io/gwaslab/Harmonization/
+    params:
+      run: True
+    gl_params:
+      basic_check: False
+      n_cores: *cores
+     # ref_seq: "data/GCA_000001405.14_GRCh37.p13_full_analysis_set.fna"
+     # ref_infer: "data/EUR.ALL.split_norm_af.1kgp3v5.hg19.vcf.gz"
+     # ref_alt_freq: "AF"
+  report_min_pvalue:
+    params:
+      run: True
+      workspace: "min_P"
+  sort_alphabetically:
+    params:
+      run: True
+    gl_params:
+      n_cores: *cores
+  report_harmonization_summary:
+    params:
+      run: True
+      workspace: "metal"
+      workspace_subfolder: True
+  report_inflation_factors:
+    params:
+      run: True
+      workspace: "if"
+  qq_manhattan_plots:
+    params:
+      run: True
+      workspace: "plots"
+      dist: 2
+    gl_params:
+      mode: 'mqq'
+      stratified : True
+      maf_bins: [[0, 0.01], [0.01, 0.05], [0.05, 1]]
+      scaled: True
+      build: "19"
+      skip: 1
+      sig_level: 5e-8
+  write_metal:
+    params:
+      run: True
+      workspace: "metal"
+      workspace_subfolder: True
+    gl_params:
+      fmt: "metal_het"
+      to_csvargs:
+        compression:
+          method: "gzip"
+          compresslevel: 1
+          mtime: 1
+
+
+# Filename transformation, e.g.: seq.3007.7.gwas.regenie.gz
+filename_mask: [ True, True, True, False, False, False]
+filename_sep: '.'
+
+# IO
+root_path: "results"
+log_filename: "gwaspipe.log"
+formatbook_path: "data/formatbook.json"     # fill this var if you want to provide a custom formatbook

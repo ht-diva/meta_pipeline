@@ -1,0 +1,9 @@
+name: create_inflation_factors_table
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python<=3.10
+  - pip==23.3.2
+  - pip:
+      - click==8.1.7

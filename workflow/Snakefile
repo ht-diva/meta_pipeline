@@ -1,6 +1,4 @@
 from snakemake.utils import min_version
-from pathlib import Path
-import pandas as pd
 
 ##### set minimum snakemake version #####
 min_version("8.4.1")
@@ -15,7 +13,7 @@ include: "rules/delivery.smk"
 
 rule all:
     input:
-        expand(dst_path("metal/{seqid}/.delivery.done"), seqid=matching_map().seqid),
+        expand(dst_path("output/{seqid}/.delivery.done"), seqid=matching_map().seqid),
         dst_path("tables_delivery.done"),
         expand(dst_path("plots/{seqid}.png"), seqid=matching_map().seqid),
 
@@ -49,20 +47,9 @@ rule execute_metal:
         "metal {input}"
 
 
-rule sort:
+rule sort_and_filter:
     input:
         ws_path("metal/{seqid}/METAL_output_{seqid}_1.TBL"),
-    output:
-        ws_path("metal/{seqid}/{seqid}.sorted.TBL"),
-    resources:
-        runtime=lambda wc, attempt: attempt * 60,
-    shell:
-        "sort --parallel={threads} -k 1n -k 2n {input} > {output}"
-
-
-rule filter:
-    input:
-        ws_path("metal/{seqid}/{seqid}.sorted.TBL"),
     output:
         ws_path("metal/{seqid}/{seqid}.sorted.filtered.TBL"),
     resources:
@@ -70,16 +57,14 @@ rule filter:
     params:
         char="?",
     shell:
-        """
-        grep -v {params.char} {input} > {output}
-        """
+        "sort --parallel={threads} -k 1n -k 2n {input} | grep -v {params.char} > {output}"
 
 
 rule standardize:
     input:
         ws_path("metal/{seqid}/{seqid}.sorted.filtered.TBL"),
     output:
-        ws_path("metal/{seqid}/{seqid}.metal_het.tsv.gz"),
+        ws_path("output/{seqid}/{seqid}.gwaslab.tsv.gz"),
         temp(ws_path("min_P/{seqid}.nlargest.txt")),
         temp(ws_path("if/{seqid}.if.txt")),
         ws_path("plots/{seqid}.png"),

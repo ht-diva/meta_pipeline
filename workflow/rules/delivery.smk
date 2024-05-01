@@ -1,11 +1,11 @@
 rule sync_outputs_folder:
     input:
-        ws_path("metal/{seqid}/{seqid}.metal_het.tsv.gz"),
+        ws_path("output/{seqid}/{seqid}.gwaslab.tsv.gz"),
     output:
-        touch(dst_path("metal/{seqid}/.delivery.done")),
+        touch(dst_path("output/{seqid}/.delivery.done")),
     params:
-        folder=ws_path("metal/{seqid}/"),
-        output_folders=dst_path("metal"),
+        folder=ws_path("output/{seqid}/"),
+        output_folders=dst_path("output"),
         exclude=config.get("exclude_file"),
     resources:
         runtime=lambda wc, attempt: attempt * 60,

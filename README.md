@@ -32,7 +32,7 @@ The pipeline generates output to the path specified by the **workspace_path** va
 
 The pipeline utilizes 2 path_list files to access the path to the study summary statistics, which can be found in the [data](data) directory.
 
-Initially, the pipeline attempts to match each protein label from the first study with its corresponding label from the second study. It generates a **mismatch_table.csv** file in the workspace. Only datasets that match are processed with METAL.
+Initially, the pipeline attempts to match each protein label from the first study with its corresponding label from the second study. It generates a **mismatch_table.csv** file in the workspace. Only matching datasets are processed with METAL.
 
 Any files listed in the path_list but not found in the filesystem will be recorded in the **missing_files.csv** file.
 

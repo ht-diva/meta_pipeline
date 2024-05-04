@@ -1,1 +1,3 @@
-*_1.TBL
+*.TBL
+*.TBL.info
+*.txt

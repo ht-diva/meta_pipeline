@@ -20,11 +20,15 @@ default-resources:
     mem_mb: attempt * 512
     threads: 1
     runtime: attempt * 5
+set-threads:
+    sort: *cores
+    standardize: *cores
 set-resources:
     execute_metal:
         mem_mb: 8192 + attempt * 2048
-    sort:
+    sort_and_filter:
         threads: *cores
         mem_mb: 2048 + attempt * 2048
-    filter:
-        mem_mb: 2048 + attempt * 2048
+    standardize:
+        mem_mb: 22528 + attempt * 2048
+        threads: *cores

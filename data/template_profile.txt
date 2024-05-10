@@ -37,5 +37,7 @@ PROCESS input_study_two
 # -----------------------------------------------------------------------------------------'
 OUTFILE output_path .TBL #you need the space before '.TBL' for some reason, and it will output a '1.TBL', again for whatever reason
 LOGPVALUE ON
+EFFECT_PRINT_PRECISION 12
+STDERR_PRINT_PRECISION 12
 ANALYZE HETEROGENEITY
 CLEAR

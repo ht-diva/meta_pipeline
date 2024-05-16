@@ -32,3 +32,6 @@ set-resources:
     standardize:
         mem_mb: 22528 + attempt * 2048
         threads: *cores
+    filter_heterogeneity:
+        mem_mb: 8192 + attempt * 2048
+

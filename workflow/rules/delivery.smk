@@ -1,6 +1,7 @@
 rule sync_outputs_folder:
     input:
         ws_path("output/{seqid}/{seqid}.gwaslab.tsv.gz"),
+        ws_path("output/{seqid}/{seqid}_heterogenous_snp.tsv"),
     output:
         touch(dst_path("output/{seqid}/.delivery.done")),
     params:

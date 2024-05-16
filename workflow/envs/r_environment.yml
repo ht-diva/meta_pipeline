@@ -1,0 +1,11 @@
+name: r_filter_heterogeneity
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+  - R
+dependencies: #R>=4.3
+  - r-base=4.3.3
+  - r-optparse=1.7.4
+  - r-tidyverse=2.0.0
+  - r-R.utils=2.12.3

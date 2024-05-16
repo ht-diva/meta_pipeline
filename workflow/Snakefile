@@ -16,8 +16,7 @@ rule all:
         expand(dst_path("output/{seqid}/.delivery.done"), seqid=matching_map().seqid),
         dst_path("tables_delivery.done"),
         expand(dst_path("plots/{seqid}.png"), seqid=matching_map().seqid),
-
-
+	
 rule create_profiles:
     input:
         template=config.get("template_profile"),
@@ -108,3 +107,23 @@ rule generate_min_pvalue_table:
         input_path=ws_path("min_P"),
     shell:
         "python workflow/scripts/create_report_table.py -i {params.input_path} -o {output}"
+
+rule filter_heterogeneity:
+    input:
+        ws_path("output/{seqid}/{seqid}.gwaslab.tsv.gz"),
+    output:
+        ws_path("output/{seqid}/{seqid}_heterogenous_snp.tsv"),
+    conda:
+        "envs/r_environment.yml"
+    resources:
+        runtime=lambda wc, attempt: attempt * 10,
+    params:
+        NEF=config.get("params").get("nef"),
+    shell:
+        """
+         Rscript workflow/scripts/s01_heterogenity_filter.R \
+            --input {input} \
+            --seqid {wildcards.seqid} \
+            --NEF {params.NEF} \
+            --output {output} 
+        """

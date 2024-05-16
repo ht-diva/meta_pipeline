@@ -11,7 +11,7 @@ opt = parse_args(opt_parser);
 dataset<-fread(opt$input)
 
 # filter snps significant in the meta-analysis and significant with opposite direction in single studies
-threshold<-(-log10((5*10^(-8))/opt$NEF))
+threshold<-(-log10((5*10^(-8))/as.numeric(opt$NEF)))
 unconsistent<-c("-+","+-")
 heterogenous<-dataset[dataset$MLOG10P>=threshold&dataset$DIRECTION%in%unconsistent,]
 heterogenous$SEQID<-rep(opt$seqi,nrow(heterogenous))

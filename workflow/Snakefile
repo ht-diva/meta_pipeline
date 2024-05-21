@@ -16,7 +16,8 @@ rule all:
         expand(dst_path("output/{seqid}/.delivery.done"), seqid=matching_map().seqid),
         dst_path("tables_delivery.done"),
         expand(dst_path("plots/{seqid}.png"), seqid=matching_map().seqid),
-	
+
+
 rule create_profiles:
     input:
         template=config.get("template_profile"),
@@ -108,6 +109,7 @@ rule generate_min_pvalue_table:
     shell:
         "python workflow/scripts/create_report_table.py -i {params.input_path} -o {output}"
 
+
 rule filter_heterogeneity:
     input:
         ws_path("output/{seqid}/{seqid}.gwaslab.tsv.gz"),
@@ -125,5 +127,5 @@ rule filter_heterogeneity:
             --input {input} \
             --seqid {wildcards.seqid} \
             --NEF {params.NEF} \
-            --output {output} 
+            --output {output}
         """

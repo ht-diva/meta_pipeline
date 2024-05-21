@@ -34,4 +34,3 @@ set-resources:
         threads: *cores
     filter_heterogeneity:
         mem_mb: 8192 + attempt * 2048
-

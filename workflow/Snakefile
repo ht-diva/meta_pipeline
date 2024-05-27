@@ -84,6 +84,19 @@ rule standardize:
         "-o {params.output_path}"
 
 
+rule bgzip_tabix:
+    input:
+        ws_path("output/{seqid}/{seqid}.gwaslab.tsv.gz"),
+    output:
+        ws_path("output/{seqid}/{seqid}.gwaslab.tsv.gz.tbi"),
+    conda:
+        "envs/bgzip_tabix.yaml"
+    resources:
+        runtime=lambda wc, attempt: attempt * 10,
+    shell:
+        "workflow/scripts/bgzip_tabix.sh {input} {threads}"
+
+
 rule generate_if_table:
     input:
         expand(ws_path("if/{seqid}.if.txt"), seqid=matching_map().seqid),

@@ -1,0 +1,6 @@
+name: bgzip_tabix
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - htslib=1.16

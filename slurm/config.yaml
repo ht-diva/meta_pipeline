@@ -23,6 +23,7 @@ default-resources:
 set-threads:
     sort: *cores
     standardize: *cores
+    bgzip_tabix: *cores
 set-resources:
     execute_metal:
         mem_mb: 8192 + attempt * 2048
@@ -32,5 +33,7 @@ set-resources:
     standardize:
         mem_mb: 22528 + attempt * 2048
         threads: *cores
+    bgzip_tabix:
+      threads: *cores
     filter_heterogeneity:
         mem_mb: 8192 + attempt * 2048

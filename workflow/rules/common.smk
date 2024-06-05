@@ -2,7 +2,7 @@ import pandas as pd
 from pathlib import Path
 
 
-def matching_map():
+def matching_map(overwrite_tables=False):
     path_list_study_one = config.get("path_list_study_one")
     path_list_study_two = config.get("path_list_study_two")
     temp_dict = {}
@@ -31,12 +31,9 @@ def matching_map():
 
     # Save missing files list
     missing_table = pd.Series(missing_file)
-    missing_table.to_csv(ws_path("missing_files.csv"), sep="\t")
-
-    # Save data with mismatching values
-    # mismatching_dict = {
-    #     key: temp_dict[key] for key in temp_dict if len(temp_dict[key]) <= 1
-    # }
+    missing_table_path = ws_path("missing_files.csv")
+    if not Path(missing_table_path).exists() or overwrite_tables:
+        missing_table.to_csv(missing_table_path, sep="\t")
 
     mismatching_data = [
         (
@@ -48,6 +45,7 @@ def matching_map():
         if len(value) <= 1
     ]
 
+    # Save data with mismatching values
     mismatching_table = (
         pd.DataFrame.from_records(
             mismatching_data,
@@ -56,14 +54,11 @@ def matching_map():
         .set_index("seqid", drop=True)
         .sort_index()
     )
-    mismatching_table.to_csv(ws_path("mismatch_table.csv"), sep="\t")
+    mismatching_table_path = ws_path("mismatch_table.csv")
+    if not Path(mismatching_table_path).exists() or overwrite_tables:
+        mismatching_table.to_csv(mismatching_table_path, sep="\t")
 
-    # return data with matching values
-    # matching_dict = {
-    #     key: temp_dict[key] for key in temp_dict if len(temp_dict[key]) > 1
-    # }
-
-    data = [
+    matching_data = [
         (key, value["file_path_study_one"], value["file_path_study_two"])
         for key, value in temp_dict.items()
         if len(value) > 1
@@ -71,7 +66,8 @@ def matching_map():
 
     matching_table = (
         pd.DataFrame.from_records(
-            data, columns=["seqid", "file_path_study_one", "file_path_study_two"]
+            matching_data,
+            columns=["seqid", "file_path_study_one", "file_path_study_two"],
         )
         .set_index("seqid", drop=False)
         .sort_index()

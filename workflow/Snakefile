@@ -23,7 +23,7 @@ rule create_profiles:
         template=config.get("template_profile"),
     params:
         outdir=ws_path("metal/{seqid}"),
-        matching_map=matching_map(),
+        matching_map=matching_map(overwrite_tables=True),
     output:
         ws_path("metal/{seqid}/profile_{seqid}.txt"),
     conda:

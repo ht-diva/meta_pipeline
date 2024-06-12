@@ -1,3 +1,4 @@
 *.TBL
 *.TBL.info
 *.txt
+*.gz

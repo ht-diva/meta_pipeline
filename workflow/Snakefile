@@ -88,11 +88,12 @@ rule bgzip_tabix:
     input:
         ws_path("output/{seqid}/{seqid}.gwaslab.tsv.gz"),
     output:
-        ws_path("output/{seqid}/{seqid}.gwaslab.tsv.gz.tbi"),
+        ws_path("output/{seqid}/{seqid}.gwaslab.tsv.bgz"),
+        ws_path("output/{seqid}/{seqid}.gwaslab.tsv.bgz.tbi"),
     conda:
         "envs/bgzip_tabix.yaml"
     resources:
-        runtime=lambda wc, attempt: attempt * 10,
+        runtime=lambda wc, attempt: attempt * 30,
     shell:
         "workflow/scripts/bgzip_tabix.sh {input} {threads}"
 

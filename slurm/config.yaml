@@ -34,6 +34,7 @@ set-resources:
         mem_mb: 22528 + attempt * 2048
         threads: *cores
     bgzip_tabix:
+      mem_mb: 1024 + attempt * 1024
       threads: *cores
     filter_heterogeneity:
         mem_mb: 8192 + attempt * 2048

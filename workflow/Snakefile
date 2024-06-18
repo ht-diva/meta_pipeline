@@ -39,6 +39,7 @@ rule execute_metal:
         ws_path("metal/{seqid}/profile_{seqid}.txt"),
     output:
         ws_path("metal/{seqid}/METAL_output_{seqid}_1.TBL"),
+        ws_path("metal/{seqid}/METAL_output_{seqid}_1.TBL.info"),
     container:
         "docker://gitlab.fht.org:5050/hds-center/containers/metal:c9558b23"
     resources:
@@ -65,8 +66,8 @@ rule standardize:
         ws_path("metal/{seqid}/{seqid}.sorted.filtered.TBL"),
     output:
         ws_path("output/{seqid}/{seqid}.gwaslab.tsv.gz"),
-        temp(ws_path("min_P/{seqid}.nlargest.txt")),
-        temp(ws_path("if/{seqid}.if.txt")),
+        ws_path("min_P/{seqid}.nlargest.txt"),
+        ws_path("if/{seqid}.if.txt"),
         ws_path("plots/{seqid}.png"),
     conda:
         "scripts/gwaspipe/environment.yml"

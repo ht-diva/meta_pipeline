@@ -18,20 +18,20 @@ rule all:
         expand(dst_path("plots/{seqid}.png"), seqid=matching_map().seqid),
 
 
-# rule create_profiles:
-#     input:
-#         template=config.get("template_profile"),
-#     params:
-#         outdir=ws_path("metal/{seqid}"),
-#         matching_map=matching_map(),
-#     output:
-#         ws_path("metal/{seqid}/profile_{seqid}.txt"),
-#     conda:
-#         "envs/python.yml"
-#     resources:
-#         runtime=lambda wc, attempt: attempt * 15,
-#     script:
-#         "scripts/create_profiles.py"
+rule create_profiles:
+    input:
+        template=config.get("template_profile"),
+    params:
+        outdir=ws_path("metal/{seqid}"),
+        matching_map=matching_map(),
+    output:
+        ws_path("metal/{seqid}/profile_{seqid}.txt"),
+    conda:
+        "envs/python.yml"
+    resources:
+        runtime=lambda wc, attempt: attempt * 15,
+    script:
+        "scripts/create_profiles.py"
 
 
 rule execute_metal:

@@ -51,7 +51,7 @@ steps:
   report_harmonization_summary:
     params:
       run: True
-      workspace: "metal"
+      workspace: "output"
       workspace_subfolder: True
   report_inflation_factors:
     params:

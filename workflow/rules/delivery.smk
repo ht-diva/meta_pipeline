@@ -21,7 +21,7 @@ rule sync_tables:
         table_minp=ws_path("min_pvalue_table.tsv"),
         table_if=ws_path("inflation_factors_table.tsv"),
     output:
-        touch(protected(dst_path("tables_delivery.done"))),
+        touch(dst_path("tables_delivery.done")),
     params:
         table_minp=dst_path("min_pvalue_table.tsv"),
         table_if=dst_path("inflation_factors_table.tsv"),
@@ -37,7 +37,7 @@ rule sync_plots:
     input:
         ws_path("plots/{seqid}.png"),
     output:
-        protected(dst_path("plots/{seqid}.png")),
+        dst_path("plots/{seqid}.png"),
     resources:
         runtime=lambda wc, attempt: attempt * 30,
     shell:

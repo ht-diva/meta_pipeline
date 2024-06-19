@@ -10,7 +10,7 @@ local-cores: 1
 cores: &cores 4
 latency-wait: 60
 keep-going: True
-rerun-incomplete: False
+rerun-incomplete: True
 printshellcmds: True
 scheduler: ilp
 

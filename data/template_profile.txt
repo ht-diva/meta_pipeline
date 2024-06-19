@@ -12,7 +12,7 @@ CUSTOMVARIABLE TotalSampleSize
 # Describe and process the GWAS input files of cohort INTERVAL WHI_EA
 SEPARATOR  TAB
 MARKER   SNPID
-ALLELE   NEA EA
+ALLELE   EA NEA
 FREQLABEL   EAF
 EFFECT   BETA
 STDERR   SE
@@ -25,7 +25,7 @@ PROCESS input_study_one
 # Describe and process the GWAS input files of cohort CHRIS
 SEPARATOR  TAB
 MARKER   SNPID
-ALLELE   NEA EA
+ALLELE   EA NEA
 FREQLABEL   EAF
 EFFECT   BETA
 STDERR   SE

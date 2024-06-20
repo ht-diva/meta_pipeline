@@ -1,6 +1,6 @@
 # paths
-workspace_path: "results"
-dest_path: "destination"
+workspace_path: "/group/diangelantonio/users/Solene/Metal/results_digits_not_flipped/"
+dest_path: "/exchange/healthds/pQTL/results/META_CHRIS_INTERVAL/qced_sumstats_digits_not_flipped"
 path_list_study_one: "data/interval_path_list.txt"
 path_list_study_two: "data/chris_path_list.txt"
 template_profile: "data/template_profile.txt"
@@ -10,3 +10,8 @@ params:
   standardize_sumstats:
     input_format: "metal_het"
     config_file: "config/config_metal_heterogeneity.yml"
+  filter_heterogeneity:
+    nef: 3978
+  filter_significant:
+    nef: 3978
+

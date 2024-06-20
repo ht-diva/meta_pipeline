@@ -26,7 +26,7 @@ set-threads:
     bgzip_tabix: *cores
 set-resources:
     execute_metal:
-        mem_mb: 8192 + attempt * 2048
+        mem_mb: 12288 + attempt * 4096
     sort_and_filter:
         threads: *cores
         mem_mb: 2048 + attempt * 2048
@@ -38,3 +38,5 @@ set-resources:
       threads: *cores
     filter_heterogeneity:
         mem_mb: 8192 + attempt * 2048
+    filter_significant:
+        mem_mb: 12288 + attempt * 4096

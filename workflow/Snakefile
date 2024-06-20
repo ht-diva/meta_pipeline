@@ -43,7 +43,7 @@ rule execute_metal:
     container:
         "docker://gitlab.fht.org:5050/hds-center/containers/metal:c9558b23"
     resources:
-        runtime=lambda wc, attempt: attempt * 10,
+        runtime=lambda wc, attempt: attempt * 30,
     shell:
         "metal {input}"
 
@@ -76,7 +76,7 @@ rule standardize:
         config_file=config.get("params").get("standardize_sumstats").get("config_file"),
         output_path=config.get("workspace_path"),
     resources:
-        runtime=lambda wc, attempt: attempt * 30,
+        runtime=lambda wc, attempt: attempt * 60,
     shell:
         "python workflow/scripts/gwaspipe/src/gwaspipe.py "
         "-f {params.format} "
@@ -94,7 +94,7 @@ rule bgzip_tabix:
     conda:
         "envs/bgzip_tabix.yaml"
     resources:
-        runtime=lambda wc, attempt: attempt * 30,
+        runtime=lambda wc, attempt: attempt * 60,
     shell:
         "workflow/scripts/bgzip_tabix.sh {input} {threads}"
 
@@ -125,20 +125,40 @@ rule generate_min_pvalue_table:
         "python workflow/scripts/create_report_table.py -i {params.input_path} -o {output}"
 
 
-rule filter_heterogeneity:
+#rule filter_heterogeneity:
+#    input:
+#        ws_path("output/{seqid}/{seqid}.gwaslab.tsv.gz"),
+#    output:
+#        ws_path("output/{seqid}/{seqid}_heterogenous_snp.tsv"),
+#    conda:
+#        "envs/r_environment.yml"
+#    resources:
+#        runtime=lambda wc, attempt: attempt * 10,
+#    params:
+#        NEF=config.get("params").get("nef"),
+#    shell:
+#        """
+#         Rscript workflow/scripts/s01_heterogenity_filter.R \
+#            --input {input} \
+#            --seqid {wildcards.seqid} \
+#            --NEF {params.NEF} \
+#            --output {output}
+#        """
+
+rule filter_significant:
     input:
         ws_path("output/{seqid}/{seqid}.gwaslab.tsv.gz"),
     output:
-        ws_path("output/{seqid}/{seqid}_heterogenous_snp.tsv"),
+        ws_path("output/{seqid}/{seqid}_significant_snp.tsv"),
     conda:
         "envs/r_environment.yml"
     resources:
-        runtime=lambda wc, attempt: attempt * 10,
+        runtime=lambda wc, attempt: attempt * 40,
     params:
-        NEF=config.get("params").get("nef"),
+        NEF=3978,
     shell:
         """
-         Rscript workflow/scripts/s01_heterogenity_filter.R \
+         Rscript workflow/scripts/s01_significancy_filter.R \
             --input {input} \
             --seqid {wildcards.seqid} \
             --NEF {params.NEF} \

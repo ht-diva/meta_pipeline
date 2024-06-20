@@ -6,7 +6,7 @@
 #SBATCH --partition cpuq
 #SBATCH --cpus-per-task 1
 #SBATCH --mem 8G
-#SBATCH --time 48:00:00
+#SBATCH --time 96:00:00
 
 source ~/.bashrc
 module -s load singularity/3.8.5

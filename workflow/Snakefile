@@ -13,76 +13,25 @@ include: "rules/delivery.smk"
 
 rule all:
     input:
-        expand(dst_path("output/{seqid}/.delivery.done"), seqid=matching_map().seqid),
-        dst_path("tables_delivery.done"),
-        expand(dst_path("plots/{seqid}.png"), seqid=matching_map().seqid),
+        expand(dst_path("output/{seqid}/.delivery.done"), seqid=analytes.seqid),
 
 
-rule create_profiles:
+rule filter_infoscore:
     input:
-        template=config.get("template_profile"),
-    params:
-        outdir=ws_path("metal/{seqid}"),
-        matching_map=matching_map(),
+        previous_path("output/{seqid}/{seqid}.gwaslab.tsv.bgz"),
     output:
-        ws_path("metal/{seqid}/profile_{seqid}.txt"),
+        ws_path("output/{seqid}/{seqid}.gwaslab.tsv.gz"),
     conda:
-        "envs/python.yml"
-    resources:
-        runtime=lambda wc, attempt: attempt * 15,
-    script:
-        "scripts/create_profiles.py"
-
-
-rule execute_metal:
-    input:
-        ws_path("metal/{seqid}/profile_{seqid}.txt"),
-    output:
-        ws_path("metal/{seqid}/METAL_output_{seqid}_1.TBL"),
-        ws_path("metal/{seqid}/METAL_output_{seqid}_1.TBL.info"),
-    container:
-        "docker://gitlab.fht.org:5050/hds-center/containers/metal:c9558b23"
+        "envs/filter_infoscore.yaml"
+    params:
+        snpid2filter=config.get("snpid2filter"),
     resources:
         runtime=lambda wc, attempt: attempt * 30,
     shell:
-        "metal {input}"
-
-
-rule sort_and_filter:
-    input:
-        ws_path("metal/{seqid}/METAL_output_{seqid}_1.TBL"),
-    output:
-        ws_path("metal/{seqid}/{seqid}.sorted.filtered.TBL"),
-    resources:
-        runtime=lambda wc, attempt: attempt * 60,
-    params:
-        char="?",
-    shell:
-        "sort --parallel={threads} -k 1n -k 2n {input} | grep -v {params.char} > {output}"
-
-
-rule standardize:
-    input:
-        ws_path("metal/{seqid}/{seqid}.sorted.filtered.TBL"),
-    output:
-        ws_path("output/{seqid}/{seqid}.gwaslab.tsv.gz"),
-        ws_path("min_P/{seqid}.nlargest.txt"),
-        ws_path("if/{seqid}.if.txt"),
-        ws_path("plots/{seqid}.png"),
-    conda:
-        "scripts/gwaspipe/environment.yml"
-    params:
-        format=config.get("params").get("standardize_sumstats").get("input_format"),
-        config_file=config.get("params").get("standardize_sumstats").get("config_file"),
-        output_path=config.get("workspace_path"),
-    resources:
-        runtime=lambda wc, attempt: attempt * 60,
-    shell:
-        "python workflow/scripts/gwaspipe/src/gwaspipe.py "
-        "-f {params.format} "
-        "-c {params.config_file} "
+        "python workflow/scripts/filter_infoscore.py "
         "-i {input} "
-        "-o {params.output_path}"
+        "-o {output} "
+        "-f {params.snpid2filter}"
 
 
 rule bgzip_tabix:
@@ -97,70 +46,3 @@ rule bgzip_tabix:
         runtime=lambda wc, attempt: attempt * 60,
     shell:
         "workflow/scripts/bgzip_tabix.sh {input} {threads}"
-
-
-rule generate_if_table:
-    input:
-        expand(ws_path("if/{seqid}.if.txt"), seqid=matching_map().seqid),
-    output:
-        ws_path("inflation_factors_table.tsv"),
-    conda:
-        "envs/create_report_table.yaml"
-    params:
-        input_path=ws_path("if"),
-    shell:
-        "python workflow/scripts/create_report_table.py -i {params.input_path} -o {output}"
-
-
-rule generate_min_pvalue_table:
-    input:
-        expand(ws_path("min_P/{seqid}.nlargest.txt"), seqid=matching_map().seqid),
-    output:
-        ws_path("min_pvalue_table.tsv"),
-    conda:
-        "envs/create_report_table.yaml"
-    params:
-        input_path=ws_path("min_P"),
-    shell:
-        "python workflow/scripts/create_report_table.py -i {params.input_path} -o {output}"
-
-
-#rule filter_heterogeneity:
-#    input:
-#        ws_path("output/{seqid}/{seqid}.gwaslab.tsv.gz"),
-#    output:
-#        ws_path("output/{seqid}/{seqid}_heterogenous_snp.tsv"),
-#    conda:
-#        "envs/r_environment.yml"
-#    resources:
-#        runtime=lambda wc, attempt: attempt * 10,
-#    params:
-#        NEF=config.get("params").get("nef"),
-#    shell:
-#        """
-#         Rscript workflow/scripts/s01_heterogenity_filter.R \
-#            --input {input} \
-#            --seqid {wildcards.seqid} \
-#            --NEF {params.NEF} \
-#            --output {output}
-#        """
-
-rule filter_significant:
-    input:
-        ws_path("output/{seqid}/{seqid}.gwaslab.tsv.gz"),
-    output:
-        ws_path("output/{seqid}/{seqid}_significant_snp.tsv"),
-    conda:
-        "envs/r_environment.yml"
-    resources:
-        runtime=lambda wc, attempt: attempt * 40,
-    params:
-        NEF=3978,
-    shell:
-        """
-         Rscript workflow/scripts/s01_significancy_filter.R \
-            --input {input} \
-            --seqid {wildcards.seqid} \
-            --NEF {params.NEF} \
-            --output {output}
-        """

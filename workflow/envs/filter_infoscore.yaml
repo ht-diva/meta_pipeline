@@ -1,0 +1,11 @@
+name: filter_infoscore
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - pip==24.0
+  - pip:
+      - click==8.1.7
+      - pandas==2.2
+      - pyarrow==16.0

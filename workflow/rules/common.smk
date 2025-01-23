@@ -1,6 +1,22 @@
 import pandas as pd
 from pathlib import Path
 
+# Define input for the rules
+data = []
+with open(config["sumstats_path"], "r") as fp:
+    lines = fp.readlines()
+
+for line in lines:
+    p = Path(line.strip())
+    seqid = ".".join(p.stem.split(".")[:3])
+    data.append((seqid, str(p)))
+
+analytes = (
+    pd.DataFrame.from_records(data, columns=["seqid", "sumstat_path"])
+    .set_index("seqid", drop=False)
+    .sort_index()
+)
+
 
 def matching_map():
     path_list_study_one = config.get("path_list_study_one")
@@ -87,3 +103,7 @@ def ws_path(file_path):
 
 def dst_path(file_path):
     return str(Path(config.get("dest_path"), file_path))
+
+
+def previous_path(file_path):
+    return str(Path(config.get("previous_results_path"), file_path))

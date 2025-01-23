@@ -2,7 +2,6 @@ rule sync_outputs_folder:
     input:
         ws_path("output/{seqid}/{seqid}.gwaslab.tsv.bgz"),
         ws_path("output/{seqid}/{seqid}.gwaslab.tsv.bgz.tbi"),
-        ws_path("output/{seqid}/{seqid}_significant_snp.tsv"),
     output:
         touch(dst_path("output/{seqid}/.delivery.done")),
     params:
